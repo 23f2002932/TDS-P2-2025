@@ -4,10 +4,33 @@ import json
 from typing import Any, Dict, Optional
 
 @tool
+def get_request(url: str, params: Optional[Dict[str, Any]] = None) -> str:
+    """
+    Sends a GET request to the specified URL with optional query parameters.
+    
+    Args:
+        url: The endpoint URL to send the GET request to
+        params: Optional dictionary containing query parameters
+        
+    Returns:
+        The server response as a string (JSON or text)
+    """
+    try:
+        print(f"\nSending GET request to: {url}")
+        if params:
+            print(f"With params: {json.dumps(params, indent=4)}")
+        response = requests.get(url, params=params, timeout=30)
+        response.raise_for_status()
+        print(f"Response: {response.text[:500]}...")
+        return response.text
+    except Exception as e:
+        return f"Error sending GET request: {str(e)}"
+
+
+@tool
 def post_request(url: str, payload: Dict[str, Any], headers: Optional[Dict[str, str]] = None) -> Any:
     """
     Send an HTTP POST request to the given URL with the provided payload.
-
     This function is designed for LangGraph applications, where it can be wrapped
     as a Tool or used inside a Runnable to call external APIs, webhooks, or backend
     services during graph execution.
@@ -17,11 +40,9 @@ def post_request(url: str, payload: Dict[str, Any], headers: Optional[Dict[str, 
         payload (Dict[str, Any]): The JSON-serializable request body.
         headers (Optional[Dict[str, str]]): Optional HTTP headers to include
             in the request. If omitted, a default JSON header is applied.
-
     Returns:
         Any: The response body. If the server returns JSON, a parsed dict is
         returned. Otherwise, the raw text response is returned.
-
     Raises:
         requests.HTTPError: If the server responds with an unsuccessful status.
         requests.RequestException: For network-related errors.
