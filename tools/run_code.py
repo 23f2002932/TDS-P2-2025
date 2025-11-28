@@ -5,7 +5,7 @@ from dotenv import load_dotenv
 import os
 from google.genai import types
 load_dotenv()
-client = genai.Client()
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def strip_code_fences(code: str) -> str:
     code = code.strip()
@@ -26,12 +26,10 @@ def run_code(code: str) -> dict:
       3. Writes code into a temporary .py file
       4. Executes the file
       5. Returns its output
-
     Parameters
     ----------
     code : str
         Python source code to execute.
-
     Returns
     -------
     dict
