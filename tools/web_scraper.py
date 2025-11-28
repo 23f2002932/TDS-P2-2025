@@ -6,21 +6,17 @@ from bs4 import BeautifulSoup
 def get_rendered_html(url: str) -> str:
     """
     Fetch and return the fully rendered HTML of a webpage.
-
     This function uses Playwright to load a webpage in a headless Chromium
     browser, allowing all JavaScript on the page to execute. Use this for
     dynamic websites that require rendering.
-
     IMPORTANT RESTRICTIONS:
     - ONLY use this for actual HTML webpages (articles, documentation, dashboards).
     - DO NOT use this for direct file links (URLs ending in .csv, .pdf, .zip, .png).
       Playwright cannot render these and will crash. Use the 'download_file' tool instead.
-
     Parameters
     ----------
     url : str
         The URL of the webpage to retrieve and render.
-
     Returns
     -------
     str
